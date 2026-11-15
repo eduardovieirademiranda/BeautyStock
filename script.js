@@ -1,9 +1,38 @@
 
 const formulario = document.getElementById("form-produto");
 const listaProdutos = document.getElementById("lista-produtos");
+const botaoContraste = document.getElementById("btn-contraste");
 
 // Lista responsável por armazenar os produtos cadastrados.
 const produtos = [];
+
+// ========================================
+// RECURSO DE ACESSIBILIDADE
+// ========================================
+
+// Ativa ou desativa o modo de alto contraste.
+if (botaoContraste) {
+    botaoContraste.addEventListener("click", function () {
+        const contrasteAtivado = document.body.classList.toggle(
+            "alto-contraste"
+        );
+
+        // Atualiza o texto do botão.
+        botaoContraste.textContent = contrasteAtivado
+            ? "Desativar alto contraste"
+            : "Ativar alto contraste";
+
+        // Informa o estado do botão às tecnologias assistivas.
+        botaoContraste.setAttribute(
+            "aria-pressed",
+            String(contrasteAtivado)
+        );
+    });
+}
+
+// ========================================
+// CADASTRO DE PRODUTOS
+// ========================================
 
 // Evento responsável pelo cadastro de produtos.
 formulario.addEventListener("submit", function (evento) {
@@ -53,6 +82,10 @@ formulario.addEventListener("submit", function (evento) {
 
     alert("Produto cadastrado com sucesso!");
 });
+
+// ========================================
+// LISTAGEM DE PRODUTOS
+// ========================================
 
 // Função responsável por exibir os produtos cadastrados.
 function atualizarTabela() {

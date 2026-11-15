@@ -12,6 +12,15 @@
     <header>
         <h1>BeautyStock</h1>
         <p>Gerenciamento de estoque de produtos de beleza</p>
+
+        <!-- Botão de acessibilidade -->
+        <button
+            type="button"
+            id="btn-contraste"
+            aria-pressed="false"
+        >
+            Ativar alto contraste
+        </button>
     </header>
 
     <main>
@@ -21,29 +30,49 @@
 
             <form id="form-produto">
                 <label for="nome">Nome do produto</label>
-                <input type="text" id="nome" required>
+                <input
+                    type="text"
+                    id="nome"
+                    required
+                >
 
                 <label for="quantidade">Quantidade</label>
-                <input type="number" id="quantidade" min="0" required>
+                <input
+                    type="number"
+                    id="quantidade"
+                    min="0"
+                    step="1"
+                    required
+                >
 
                 <label for="preco">Preço (R$)</label>
-                <input type="number" id="preco" min="0" step="0.01" required>
+                <input
+                    type="number"
+                    id="preco"
+                    min="0"
+                    step="0.01"
+                    required
+                >
 
-                <button type="submit">Cadastrar Produto</button>
+                <button type="submit">
+                    Cadastrar Produto
+                </button>
             </form>
         </section>
 
         <section class="painel">
             <h2>Produtos Cadastrados</h2>
+
             <table>
                 <thead>
                     <tr>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Preço</th>
-                        <th>Status</th>
+                        <th scope="col">Produto</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
+
                 <tbody id="lista-produtos"></tbody>
             </table>
         </section>

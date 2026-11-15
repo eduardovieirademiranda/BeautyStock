@@ -1,4 +1,5 @@
 
+/* Configurações gerais */
 * {
     box-sizing: border-box;
 }
@@ -10,6 +11,7 @@ body {
     color: #333;
 }
 
+/* Cabeçalho */
 header {
     background-color: #b84d78;
     color: white;
@@ -17,12 +19,28 @@ header {
     padding: 25px;
 }
 
+/* Botão de acessibilidade */
+#btn-contraste {
+    background-color: white;
+    color: #802044;
+    border: 2px solid white;
+    margin-top: 15px;
+    padding: 10px 18px;
+    font-weight: bold;
+}
+
+#btn-contraste:hover {
+    background-color: #f5dce6;
+}
+
+/* Conteúdo principal */
 main {
     max-width: 1000px;
     margin: 30px auto;
     padding: 0 20px;
 }
 
+/* Painéis */
 .painel {
     background-color: white;
     padding: 25px;
@@ -31,6 +49,7 @@ main {
     box-shadow: 0 2px 8px #00000015;
 }
 
+/* Formulário */
 form {
     display: flex;
     flex-direction: column;
@@ -43,6 +62,7 @@ input {
     border-radius: 5px;
 }
 
+/* Botões */
 button {
     background-color: #b84d78;
     color: white;
@@ -56,18 +76,94 @@ button:hover {
     background-color: #92365c;
 }
 
+/* Foco visível para navegação por teclado */
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid #175cd3;
+    outline-offset: 3px;
+}
+
+/* Tabela de produtos */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
+/* ====================================
+   MODO DE ALTO CONTRASTE
+   ==================================== */
+
+body.alto-contraste {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Cabeçalho em alto contraste */
+body.alto-contraste header {
+    background-color: #000;
+    color: #ffff00;
+    border-bottom: 3px solid #ffff00;
+}
+
+/* Painéis em alto contraste */
+body.alto-contraste .painel {
+    background-color: #111;
+    color: #fff;
+    border: 2px solid #ffff00;
+    box-shadow: none;
+}
+
+/* Campos do formulário */
+body.alto-contraste input {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+/* Botões em alto contraste */
+body.alto-contraste button {
+    background-color: #ffff00;
+    color: #000;
+    border: 2px solid #ffff00;
+    font-weight: bold;
+}
+
+body.alto-contraste button:hover {
+    background-color: #fff;
+    border-color: #fff;
+}
+
+/* Foco visível no modo de alto contraste */
+body.alto-contraste button:focus-visible,
+body.alto-contraste input:focus-visible {
+    outline: 3px solid #00ffff;
+    outline-offset: 3px;
+}
+
+/* Tabela em alto contraste */
+body.alto-contraste table {
+    color: #fff;
+}
+
+body.alto-contraste th {
+    color: #ffff00;
+    border-bottom: 2px solid #ffff00;
+}
+
+body.alto-contraste td {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+/* Responsividade */
 @media (max-width: 600px) {
     .painel {
         overflow-x: auto;
