@@ -169,3 +169,204 @@ body.alto-contraste td {
         overflow-x: auto;
     }
 }
+
+/* ========================================
+   MELHORIAS DO CONTROLE DE ESTOQUE
+   ======================================== */
+
+.tabela-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-container table {
+    min-width: 1050px;
+}
+
+.resumo-estoque {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #fff0f5;
+    border: 2px solid #b84d78;
+    border-radius: 10px;
+}
+
+.resumo-estoque h3 {
+    margin: 0 0 10px;
+}
+
+#valor-geral {
+    margin: 0;
+    color: #92365c;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.btn-codigo {
+    white-space: nowrap;
+    padding: 10px;
+}
+
+/* Janela do código de barras */
+#modal-codigo {
+    width: min(90%, 450px);
+    padding: 25px;
+    border: 2px solid #b84d78;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#modal-codigo::backdrop {
+    background-color: #00000099;
+}
+
+#imagem-codigo {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 15px auto;
+}
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+body.alto-contraste .resumo-estoque {
+    background-color: #000;
+    color: #fff;
+    border-color: #ffff00;
+}
+
+body.alto-contraste #valor-geral {
+    color: #ffff00;
+}
+
+body.alto-contraste #modal-codigo {
+    background-color: #111;
+    color: #fff;
+    border-color: #ffff00;
+}
+
+body.alto-contraste #imagem-codigo {
+    background-color: #fff;
+}
+
+/* ========================================
+   CONFIGURAÇÃO DOS LIMITES DE ESTOQUE
+   ======================================== */
+
+/* Respeita o atributo hidden do HTML. */
+[hidden] {
+    display: none !important;
+}
+
+#configuracao-limites {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #fff5f8;
+    border: 1px solid #b84d78;
+    border-radius: 10px;
+}
+
+#produto-encontrado {
+    margin-top: 0;
+}
+
+#mensagem-limites {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Tabela com rolagem horizontal. */
+.tabela-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-container table {
+    min-width: 1050px;
+}
+
+/* Resumo financeiro. */
+.resumo-estoque {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #fff0f5;
+    border: 2px solid #b84d78;
+    border-radius: 10px;
+}
+
+.resumo-estoque h3 {
+    margin: 0 0 10px;
+}
+
+#valor-geral {
+    margin: 0;
+    color: #92365c;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Botão de código de barras. */
+.btn-codigo {
+    white-space: nowrap;
+    padding: 10px;
+}
+
+/* Janela do código de barras. */
+#modal-codigo {
+    width: min(90%, 450px);
+    padding: 25px;
+    border: 2px solid #b84d78;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#modal-codigo::backdrop {
+    background-color: #00000099;
+}
+
+#imagem-codigo {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 15px auto;
+}
+
+/* Alto contraste nas novas funcionalidades. */
+body.alto-contraste #configuracao-limites,
+body.alto-contraste .resumo-estoque {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #ffff00;
+}
+
+body.alto-contraste #valor-geral {
+    color: #ffff00;
+}
+
+body.alto-contraste #modal-codigo {
+    background-color: #111;
+    color: #fff;
+    border-color: #ffff00;
+}
+
+body.alto-contraste #imagem-codigo {
+    background-color: #fff;
+}
+
+#cancelar-limites {
+    background-color: #777;
+    color: white;
+    margin-top: 10px;
+}
+
+#cancelar-limites:hover {
+    background-color: #555;
+}
+
+body.alto-contraste #cancelar-limites {
+    background-color: #000;
+    color: #ffff00;
+    border: 2px solid #ffff00;
+}

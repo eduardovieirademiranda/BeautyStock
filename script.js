@@ -2,43 +2,64 @@
 const formulario = document.getElementById("form-produto");
 const listaProdutos = document.getElementById("lista-produtos");
 const botaoContraste = document.getElementById("btn-contraste");
+const valorGeral = document.getElementById("valor-geral");
 
-// Lista responsável por armazenar os produtos cadastrados.
+const formBusca = document.getElementById("form-busca");
+const formLimites = document.getElementById("form-limites");
+const configuracao = document.getElementById("configuracao-limites");
+const produtoEncontrado = document.getElementById("produto-encontrado");
+const mensagemLimites = document.getElementById("mensagem-limites");
+
+const modalCodigo = document.getElementById("modal-codigo");
+const codigoProduto = document.getElementById("codigo-produto");
+const fecharCodigo = document.getElementById("fechar-codigo");
+
+// Produtos armazenados em memória.
 const produtos = [];
+let proximoCodigo = 1;
+let produtoSelecionado = null;
+
+function formatarMoeda(valor) {
+    return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function gerarCodigo() {
+    const codigo = "BS" + String(proximoCodigo).padStart(4, "0");
+    proximoCodigo++;
+    return codigo;
+}
 
 // ========================================
-// RECURSO DE ACESSIBILIDADE
+// ACESSIBILIDADE
 // ========================================
 
-// Ativa ou desativa o modo de alto contraste.
 if (botaoContraste) {
     botaoContraste.addEventListener("click", function () {
-        const contrasteAtivado = document.body.classList.toggle(
+        const ativado = document.body.classList.toggle(
             "alto-contraste"
         );
 
-        // Atualiza o texto do botão.
-        botaoContraste.textContent = contrasteAtivado
+        botaoContraste.textContent = ativado
             ? "Desativar alto contraste"
             : "Ativar alto contraste";
 
-        // Informa o estado do botão às tecnologias assistivas.
         botaoContraste.setAttribute(
             "aria-pressed",
-            String(contrasteAtivado)
+            String(ativado)
         );
     });
 }
 
 // ========================================
-// CADASTRO DE PRODUTOS
+// CADASTRO
 // ========================================
 
-// Evento responsável pelo cadastro de produtos.
 formulario.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
-    // Captura os dados informados pelo usuário.
     const nome = document.getElementById("nome").value.trim();
 
     const quantidade = Number(
@@ -49,7 +70,6 @@ formulario.addEventListener("submit", function (evento) {
         document.getElementById("preco").value
     );
 
-    // Validação dos dados do produto.
     if (
         nome.length < 3 ||
         !Number.isInteger(quantidade) ||
@@ -64,61 +84,234 @@ formulario.addEventListener("submit", function (evento) {
         return;
     }
 
-    // Cria o objeto com as informações do produto.
     const produto = {
+        codigo: gerarCodigo(),
         nome: nome,
         quantidade: quantidade,
-        preco: preco
+        preco: preco,
+        minimo: null,
+        maximo: null
     };
 
-    // Adiciona o produto à lista.
     produtos.push(produto);
-
-    // Atualiza a tabela de estoque.
     atualizarTabela();
-
-    // Limpa os campos após o cadastro.
     formulario.reset();
 
     alert("Produto cadastrado com sucesso!");
 });
 
 // ========================================
-// LISTAGEM DE PRODUTOS
+// CLASSIFICAÇÃO DO ESTOQUE
 // ========================================
 
-// Função responsável por exibir os produtos cadastrados.
+function verificarEstoque(produto) {
+    if (produto.minimo === null || produto.maximo === null) {
+        return "Não definido";
+    }
+
+    if (produto.quantidade <= produto.minimo) {
+        return "Estoque baixo";
+    }
+
+    if (produto.quantidade > produto.maximo) {
+        return "Acima do máximo";
+    }
+
+    return "Estoque adequado";
+}
+
+// ========================================
+// TABELA E CÁLCULO FINANCEIRO
+// ========================================
+
 function atualizarTabela() {
     listaProdutos.innerHTML = "";
 
+    let totalEstoque = 0;
+
     produtos.forEach(function (produto) {
         const linha = document.createElement("tr");
+        const valorTotal = produto.quantidade * produto.preco;
 
-        // Define o status conforme a quantidade disponível.
-        const status = produto.quantidade <= 5
-            ? "Estoque baixo"
-            : "Disponível";
-
-        // Formata o preço em reais.
-        const precoFormatado = produto.preco.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
+        totalEstoque += valorTotal;
 
         const dados = [
+            produto.codigo,
             produto.nome,
             produto.quantidade,
-            precoFormatado,
-            status
+            produto.minimo === null ? "-" : produto.minimo,
+            produto.maximo === null ? "-" : produto.maximo,
+            formatarMoeda(produto.preco),
+            formatarMoeda(valorTotal),
+            verificarEstoque(produto)
         ];
 
-        // Cria as células da tabela de forma segura.
         dados.forEach(function (valor) {
             const celula = document.createElement("td");
             celula.textContent = valor;
             linha.appendChild(celula);
         });
 
+        const celulaAcao = document.createElement("td");
+        const botao = document.createElement("button");
+
+        botao.type = "button";
+        botao.textContent = "Ver código de barras";
+        botao.className = "btn-codigo";
+
+        botao.addEventListener("click", function () {
+            mostrarCodigoBarras(produto);
+        });
+
+        celulaAcao.appendChild(botao);
+        linha.appendChild(celulaAcao);
         listaProdutos.appendChild(linha);
+    });
+
+    if (valorGeral) {
+        valorGeral.textContent = formatarMoeda(totalEstoque);
+    }
+}
+
+// ========================================
+// BUSCA POR CÓDIGO
+// ========================================
+
+if (formBusca) {
+    formBusca.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+
+        const codigo = document.getElementById("codigo-busca")
+            .value.trim().toUpperCase();
+
+        produtoSelecionado = produtos.find(function (produto) {
+            return produto.codigo === codigo;
+        }) || null;
+
+        if (!produtoSelecionado) {
+            configuracao.hidden = true;
+            mensagemLimites.textContent =
+                "Produto não encontrado. Verifique o código.";
+            return;
+        }
+
+        produtoEncontrado.textContent =
+            "Produto encontrado: " + produtoSelecionado.nome;
+
+        document.getElementById("estoque-minimo").value =
+            produtoSelecionado.minimo ?? "";
+
+        document.getElementById("estoque-maximo").value =
+            produtoSelecionado.maximo ?? "";
+
+        configuracao.hidden = false;
+        mensagemLimites.textContent = "";
+    });
+}
+
+// ========================================
+// CONFIGURAÇÃO DOS LIMITES
+// ========================================
+
+if (formLimites) {
+    formLimites.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+
+        if (!produtoSelecionado) {
+            mensagemLimites.textContent =
+                "Busque um produto antes de configurar os limites.";
+            return;
+        }
+
+        const minimoCampo = document.getElementById("estoque-minimo");
+        const maximoCampo = document.getElementById("estoque-maximo");
+
+        const minimo = Number(minimoCampo.value);
+        const maximo = Number(maximoCampo.value);
+
+        if (
+            minimoCampo.value.trim() === "" ||
+            maximoCampo.value.trim() === "" ||
+            !Number.isInteger(minimo) ||
+            !Number.isInteger(maximo) ||
+            minimo < 0 ||
+            maximo <= minimo
+        ) {
+            mensagemLimites.textContent =
+                "Informe valores inteiros. O máximo deve ser maior que o mínimo.";
+            return;
+        }
+
+        produtoSelecionado.minimo = minimo;
+        produtoSelecionado.maximo = maximo;
+
+        atualizarTabela();
+
+        mensagemLimites.textContent =
+            "Limites atualizados com sucesso para " +
+            produtoSelecionado.nome + ".";
+    });
+}
+
+// ========================================
+// CÓDIGO DE BARRAS
+// ========================================
+
+function mostrarCodigoBarras(produto) {
+    if (
+        !modalCodigo ||
+        !codigoProduto ||
+        typeof JsBarcode === "undefined"
+    ) {
+        alert("Não foi possível carregar o código de barras.");
+        return;
+    }
+
+    codigoProduto.textContent =
+        produto.nome + " - " + produto.codigo;
+
+    JsBarcode("#imagem-codigo", produto.codigo, {
+        format: "CODE128",
+        lineColor: "#000000",
+        background: "#ffffff",
+        width: 2,
+        height: 80,
+        displayValue: true
+    });
+
+    modalCodigo.showModal();
+}
+
+if (fecharCodigo) {
+    fecharCodigo.addEventListener("click", function () {
+        modalCodigo.close();
+    });
+}
+
+// ========================================
+// CANCELAR CONFIGURAÇÃO DE ESTOQUE
+// ========================================
+
+const botaoCancelarLimites = document.getElementById(
+    "cancelar-limites"
+);
+
+if (botaoCancelarLimites) {
+    botaoCancelarLimites.addEventListener("click", function () {
+        // Fecha a área de configuração.
+        configuracao.hidden = true;
+
+        // Desmarca o produto selecionado.
+        produtoSelecionado = null;
+
+        // Limpa o código pesquisado.
+        document.getElementById("codigo-busca").value = "";
+
+        // Limpa os campos de estoque.
+        document.getElementById("estoque-minimo").value = "";
+        document.getElementById("estoque-maximo").value = "";
+
+        mensagemLimites.textContent =
+            "Configuração cancelada.";
     });
 }
