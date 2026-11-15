@@ -2,63 +2,84 @@
 const formulario = document.getElementById("form-produto");
 const listaProdutos = document.getElementById("lista-produtos");
 
-// Armazena os produtos cadastrados.
+// Lista responsável por armazenar os produtos cadastrados.
 const produtos = [];
 
+// Evento responsável pelo cadastro de produtos.
 formulario.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
+    // Captura os dados informados pelo usuário.
     const nome = document.getElementById("nome").value.trim();
+
     const quantidade = Number(
         document.getElementById("quantidade").value
     );
+
     const preco = Number(
         document.getElementById("preco").value
     );
 
-    // Valida os dados antes do cadastro.
+    // Validação dos dados do produto.
     if (
-        !nome ||
+        nome.length < 3 ||
         !Number.isInteger(quantidade) ||
         quantidade < 0 ||
         !Number.isFinite(preco) ||
-        preco < 0
+        preco <= 0
     ) {
-        alert("Preencha os dados corretamente.");
+        alert(
+            "O nome deve ter pelo menos 3 caracteres, " +
+            "a quantidade deve ser válida e o preço maior que zero."
+        );
         return;
     }
 
+    // Cria o objeto com as informações do produto.
     const produto = {
         nome: nome,
         quantidade: quantidade,
         preco: preco
     };
 
+    // Adiciona o produto à lista.
     produtos.push(produto);
+
+    // Atualiza a tabela de estoque.
     atualizarTabela();
+
+    // Limpa os campos após o cadastro.
     formulario.reset();
 
     alert("Produto cadastrado com sucesso!");
 });
 
+// Função responsável por exibir os produtos cadastrados.
 function atualizarTabela() {
     listaProdutos.innerHTML = "";
 
     produtos.forEach(function (produto) {
         const linha = document.createElement("tr");
 
+        // Define o status conforme a quantidade disponível.
+        const status = produto.quantidade <= 5
+            ? "Estoque baixo"
+            : "Disponível";
+
+        // Formata o preço em reais.
+        const precoFormatado = produto.preco.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
         const dados = [
             produto.nome,
             produto.quantidade,
-            produto.preco.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            }),
-            produto.quantidade <= 5
-                ? "Estoque baixo"
-                : "Disponível"
+            precoFormatado,
+            status
         ];
 
+        // Cria as células da tabela de forma segura.
         dados.forEach(function (valor) {
             const celula = document.createElement("td");
             celula.textContent = valor;
