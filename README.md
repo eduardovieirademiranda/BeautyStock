@@ -1,16 +1,13 @@
-# BeautyStock
+## Requisitos do Sistema
 
-Sistema de gerenciamento de estoque de produtos de beleza.
+O BeautyStock deverá permitir:
 
-## Objetivo
-Desenvolver um MVP para facilitar o controle de
-produtos, quantidades e movimentações de estoque.
+- Cadastrar produtos de beleza.
+- Consultar produtos disponíveis.
+- Registrar entradas e saídas do estoque.
+- Identificar produtos com estoque baixo.
 
-## Funcionalidades previstas
-- Cadastro de produtos
-- Consulta de estoque
-- Registro de entradas e saídas
-- Alertas de estoque baixo
+## Controle de Versão
 
-## Status
-MVP em desenvolvimento.
+O projeto utiliza Git para controle de versão
+e GitHub para hospedagem do código-fonte.
