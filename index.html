@@ -6,47 +6,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeautyStock - Controle de Estoque</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.12.1/dist/JsBarcode.all.min.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
     <header>
         <h1>BeautyStock</h1>
         <p>Gerenciamento de estoque de produtos de beleza</p>
+
+        <button type="button" id="btn-contraste"
+                aria-pressed="false">
+            Ativar alto contraste
+        </button>
     </header>
 
     <main>
         <section class="painel">
             <h2>Controle de Estoque</h2>
-            <p>Gerencie seus produtos de forma simples.</p>
+            <p>Cadastre seus produtos de forma simples.</p>
 
             <form id="form-produto">
                 <label for="nome">Nome do produto</label>
                 <input type="text" id="nome" required>
 
-                <label for="quantidade">Quantidade</label>
-                <input type="number" id="quantidade" min="0" required>
+                <label for="preco">Preço de custo (R$)</label>
+                <input type="number" id="preco"
+                       min="0.01" step="0.01" required>
 
-                <label for="preco">Preço (R$)</label>
-                <input type="number" id="preco" min="0" step="0.01" required>
+                <label for="quantidade">Estoque atual</label>
+                <input type="number" id="quantidade"
+                       min="0" step="1" required>
 
-                <button type="submit">Cadastrar Produto</button>
+                <button type="submit">
+                    Cadastrar Produto
+                </button>
             </form>
         </section>
 
         <section class="painel">
             <h2>Produtos Cadastrados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Preço</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-produtos"></tbody>
-            </table>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Atual</th>
+                            <th scope="col">Mínimo</th>
+                            <th scope="col">Máximo</th>
+                            <th scope="col">Preço de custo</th>
+                            <th scope="col">Valor total</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-produtos"></tbody>
+                </table>
+            </div>
+
+            <div class="resumo-estoque">
+                <h3>Valor geral do estoque</h3>
+                <p id="valor-geral">R$ 0,00</p>
+            </div>
+        </section>
+
+        <section class="painel">
+            <h2>Configurar Limites de Estoque</h2>
+            <p>
+                Informe o código do produto para definir
+                ou atualizar os limites mínimo e máximo.
+            </p>
+
+            <form id="form-busca">
+                <label for="codigo-busca">
+                    Código do produto
+                </label>
+                <input
+                    type="text"
+                    id="codigo-busca"
+                    placeholder="Ex.: BS0001"
+                    required
+                >
+                <button type="submit">
+                    Buscar Produto
+                </button>
+            </form>
+
+            <div id="configuracao-limites" hidden>
+                <h3 id="produto-encontrado"></h3>
+
+                <form id="form-limites">
+                    <label for="estoque-minimo">
+                        Estoque mínimo
+                    </label>
+                    <input
+                        type="number"
+                        id="estoque-minimo"
+                        min="0"
+                        step="1"
+                        required
+                    >
+
+                    <label for="estoque-maximo">
+                        Estoque máximo
+                    </label>
+                    <input
+                        type="number"
+                        id="estoque-maximo"
+                        min="1"
+                        step="1"
+                        required
+                    >
+
+                    <button type="submit">
+                        Salvar Limites
+                    </button>
+
+
+<button type="button" id="cancelar-limites">
+    Cancelar Configuração
+</button>
+
+                </form>
+            </div>
+
+            <p id="mensagem-limites" role="status"
+               aria-live="polite"></p>
         </section>
     </main>
+
+    <dialog id="modal-codigo"
+            aria-labelledby="titulo-modal">
+        <h2 id="titulo-modal">Código de barras</h2>
+        <p id="codigo-produto"></p>
+        <svg id="imagem-codigo"></svg>
+
+        <button type="button" id="fechar-codigo">
+            Fechar
+        </button>
+    </dialog>
 </body>
 </html>

@@ -1,0 +1,39 @@
+
+name: BeautyStock - CI
+
+on:
+  push:
+    branches:
+      - master
+      - melhoria-validacao-produtos
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    name: Build e Testes Automatizados
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Verificar sintaxe JavaScript
+        run: node --check script.js
+
+      - name: Executar testes automatizados
+        run: npm test
+
+      - name: Verificar cobertura
+        run: npm run coverage
