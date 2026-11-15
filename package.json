@@ -1,0 +1,27 @@
+{
+  "name": "beautystock",
+  "version": "1.0.0",
+  "description": "O BeautyStock deverá permitir:",
+  "main": "script.js",
+  "scripts": {
+  "test": "vitest run",
+  "coverage": "vitest run --coverage"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardovieirademiranda/BeautyStock.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/eduardovieirademiranda/BeautyStock/issues"
+  },
+  "homepage": "https://github.com/eduardovieirademiranda/BeautyStock#readme",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.0",
+    "jsdom": "^31.0.1",
+    "vitest": "^5.1.0"
+  }
+}
